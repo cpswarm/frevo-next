@@ -103,6 +103,7 @@
 
     <modules>
         <module>core</module>
+		<module>fully-meshed-net</module>
     </modules>
 
 </project>
