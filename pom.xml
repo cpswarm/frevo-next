@@ -105,6 +105,7 @@
         <module>core</module>
 		<module>fully-meshed-net</module>
 		<module>nnga-method</module>
+		<module>pool-executor</module>
     </modules>
 
 </project>
