@@ -106,6 +106,7 @@
 		<module>fully-meshed-net</module>
 		<module>nnga-method</module>
 		<module>pool-executor</module>
+		<module>xor-problem</module>
     </modules>
 
 </project>
