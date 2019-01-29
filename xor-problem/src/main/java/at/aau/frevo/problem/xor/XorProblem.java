@@ -58,14 +58,14 @@ public class XorProblem extends Problem {
   public double evaluateRepresentation(Representation representation) {
     var evaluationRandom = new SplittableRandom(evaluationSeed);
     var representationContext = representation.createContext(evaluationRandom.split());
-    int correctCount = 0;
+    double errorSum = 0;
     for (int i = 0; i < operationCount; i++) {
-      if (checkXor(representationContext, evaluationRandom.nextBoolean(),
-          evaluationRandom.nextBoolean())) {
-        correctCount++;
-      }
+      errorSum += checkXor(representationContext, evaluationRandom.nextBoolean(),
+          evaluationRandom.nextBoolean());
     }
-    return (double) (correctCount) / operationCount * 100;
+
+    // convert error to fitness and return
+    return (1 - errorSum / operationCount) * 100;
   }
 
   /**
@@ -74,9 +74,9 @@ public class XorProblem extends Problem {
    * @param representationContext the {@code RepresentationContext} to check
    * @param input1                first input value
    * @param input2                second input value
-   * @return {@code true} if correct, otherwise {@code false}
+   * @return error value, {@code 0} if correct, otherwise a value {@code 0 <= v <= 1}
    */
-  public boolean checkXor(RepresentationContext<? extends Representation> representationContext,
+  public double checkXor(RepresentationContext<? extends Representation> representationContext,
       boolean input1, boolean input2) {
     // use the representation context to calculate the result
     inputs[0] = input1 ? trueValue : falseValue;
@@ -84,20 +84,16 @@ public class XorProblem extends Problem {
     representationContext.calculate(inputs, output);
 
     // compare the result against the answer
-    boolean correct = false;
     boolean answer = input1 ^ input2;
-    if (answer) {
-      if (Math.abs(output[0] - trueValue) < tolerance) {
-        correct = true;
-      }
-    } else {
-      if (Math.abs(output[0] - falseValue) < tolerance) {
-        correct = true;
-      }
-    }
-    return correct;
-  }
+    float answerFloat = answer ? trueValue : falseValue;
 
+    float outputRange = Math.abs(trueValue - falseValue);
+    float difference = Math.abs(answerFloat - output[0]);
+    if (difference < tolerance) {
+      difference = 0;
+    }
+    return Math.min(difference, outputRange) / outputRange;
+  }
 
   /**
    * Gets the value used to represent {@code true}.

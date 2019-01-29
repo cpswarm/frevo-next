@@ -32,7 +32,7 @@ import at.aau.frevo.representation.fullymeshednet.FullyMeshedNetOpBuilder;
  */
 public class XorRecipeExample {
 
-  final static int CANDIDATE_COUNT = 20;
+  final static int CANDIDATE_COUNT = 100;
   final static int GENERATION_COUNT = 4000;
 
   final static protected long EVOLUTION_SEED = 1;
@@ -53,7 +53,6 @@ public class XorRecipeExample {
         new NngaMethodBuilder(), new PoolExecutorBuilder().setPoolType(PoolType.CandidatePool),
         new XorProblemBuilder(), EVOLUTION_SEED, EVALUATION_SEED);
     try {
-
       recipe.prepare(CANDIDATE_COUNT);
       var results = recipe.run(GENERATION_COUNT);
       var bestResult = results.get(0);

@@ -36,7 +36,7 @@ public class XorProblemBuilder extends ProblemBuilder<XorProblem> {
   public XorProblemBuilder() {
     trueValue = 1;
     falseValue = -1;
-    tolerance = 0.1f;
+    tolerance = 0.05f;
     operationCount = 100;
   }
 
