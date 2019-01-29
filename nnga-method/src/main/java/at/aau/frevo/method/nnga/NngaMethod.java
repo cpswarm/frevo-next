@@ -166,7 +166,7 @@ public class NngaMethod<R extends Representation> extends Method<R> {
     for (int i = 0; i < crossCount; i++) {
       R parent1 = getSkewedRandomCandidate();
       R parent2 = null;
-      double bestDifference = 0;
+      double bestDifference = -1;
 
       for (int j = 0; j < 10; j++) {
         R t = getSkewedRandomCandidate();
