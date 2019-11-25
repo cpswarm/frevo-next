@@ -66,6 +66,10 @@ public class FullyMeshedNetOpBuilder extends OperatorBuilder<FullyMeshedNetOp, F
     weightRange = source.weightRange;
     biasRange = source.biasRange;
     randomBiasRange = source.randomBiasRange;
+    directMutationProbability = source.directMutationProbability;
+    directMutationSeverity = source.directMutationSeverity;
+    proportionalMutationProbability = source.proportionalMutationProbability;
+    proportionalMutationSeverity = source.proportionalMutationSeverity;
   }
 
   @Override

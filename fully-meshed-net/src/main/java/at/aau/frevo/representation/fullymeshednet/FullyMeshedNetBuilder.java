@@ -67,7 +67,7 @@ public class FullyMeshedNetBuilder extends RepresentationBuilder<FullyMeshedNet>
   }
 
   @Override
-  public RepresentationBuilder<FullyMeshedNet> cloneBuilder() {
+  public FullyMeshedNetBuilder cloneBuilder() {
     return new FullyMeshedNetBuilder(this);
   }
 
