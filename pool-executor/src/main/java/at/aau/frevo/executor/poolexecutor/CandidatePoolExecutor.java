@@ -32,8 +32,8 @@ import at.aau.frevo.Result;
  * Candidate pool based executor.
  * <p>
  * Candidate pool executors create a number of threads and use these to evaluate candidates
- * concurrently. For efficient execution, the number of candidates should be significantly
- * larger than the {@code threadCount}.
+ * concurrently. For efficient execution, the number of candidates should be significantly larger
+ * than the {@code threadCount}.
  */
 public class CandidatePoolExecutor extends PoolExecutor {
 
@@ -60,11 +60,12 @@ public class CandidatePoolExecutor extends PoolExecutor {
     for (var candidate : candidates) {
       tasks.add(() -> {
         double fitnessSum = 0;
-        var problemRadom = new SplittableRandom(problemRandomSeed);
+        var problemRandom = new SplittableRandom(problemRandomSeed);
 
         for (var i = 0; i < problemVariantCount; i++) {
-          var problem = problemBuilder.create(problemRadom);
-          fitnessSum += problem.evaluateRepresentation(candidate);
+          var problem = problemBuilder.create(problemRandom.split());
+          var fitness = problem.evaluateRepresentation(candidate);
+          fitnessSum += fitness;
         }
         return new Result<R>(candidate, fitnessSum / problemVariantCount);
       });
