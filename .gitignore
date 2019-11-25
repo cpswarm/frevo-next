@@ -1,6 +1,6 @@
 /.vscode/
-/.settings/
-/target/
+**/.settings/
+**/target/
 .project
 .classpath
 .flattened-pom.xml
