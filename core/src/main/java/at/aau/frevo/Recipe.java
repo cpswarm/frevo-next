@@ -32,16 +32,13 @@ import java.util.SplittableRandom;
  * @param <MB> the type of {@code MethodBuilder} used in the {@code Recipe}
  * @param <EB> the type of {@code ExecutorBuilder} used in the {@code Recipe}
  * @param <PB> the type of {@code ProblemBuilder} used in the {@code Recipe}
- * @param <R> the type of {@code Representation} used in the {@code Recipe}
- * @param <O> the type of {@code Operator} used in the {@code Recipe}
- * @param <M> the type of {@code Method} used in the {@code Recipe}
- * @param <E> the type of {@code Executor} used in the {@code Recipe}
- * @param <P> the type of {@code Problem} used in the {@code Recipe}
+ * @param <R>  the type of {@code Representation} used in the {@code Recipe}
+ * @param <O>  the type of {@code Operator} used in the {@code Recipe}
+ * @param <M>  the type of {@code Method} used in the {@code Recipe}
+ * @param <E>  the type of {@code Executor} used in the {@code Recipe}
+ * @param <P>  the type of {@code Problem} used in the {@code Recipe}
  */
-public class Recipe<RB extends RepresentationBuilder<R>, OB extends OperatorBuilder<O, R>,
-    MB extends MethodBuilder<M>, EB extends ExecutorBuilder<E>, PB extends ProblemBuilder<P>,
-    R extends Representation, O extends Operator<R>, M extends Method<? extends Representation>,
-    E extends Executor, P extends Problem> {
+public class Recipe<RB extends RepresentationBuilder<R>, OB extends OperatorBuilder<O, R>, MB extends MethodBuilder<M>, EB extends ExecutorBuilder<E>, PB extends ProblemBuilder<P>, R extends Representation, O extends Operator<R>, M extends Method<? extends Representation>, E extends Executor, P extends Problem> {
 
   protected PB problemBuilder;
   protected RB representationBuilder;
@@ -91,16 +88,17 @@ public class Recipe<RB extends RepresentationBuilder<R>, OB extends OperatorBuil
    * <p>
    * This method is useful following deserialization.
    * 
-   * @param <RB> the type of {@code RepresentationBuilder} used in the {@code Recipe}
-   * @param <OB> the type of {@code OperatorBuilder} used in the {@code Recipe}
-   * @param <MB> the type of {@code MethodBuilder} used in the {@code Recipe}
-   * @param <EB> the type of {@code ExecutorBuilder} used in the {@code Recipe}
-   * @param <PB> the type of {@code ProblemBuilder} used in the {@code Recipe}
-   * @param <R> the type of {@code Representation} used in the {@code Recipe}
-   * @param <O> the type of {@code Operator} used in the {@code Recipe}
-   * @param <M> the type of {@code Method} used in the {@code Recipe}
-   * @param <E> the type of {@code Executor} used in the {@code Recipe}
-   * @param <P> the type of {@code Problem} used in the {@code Recipe}
+   * @param <RB>                  the type of {@code RepresentationBuilder} used in the
+   *                              {@code Recipe}
+   * @param <OB>                  the type of {@code OperatorBuilder} used in the {@code Recipe}
+   * @param <MB>                  the type of {@code MethodBuilder} used in the {@code Recipe}
+   * @param <EB>                  the type of {@code ExecutorBuilder} used in the {@code Recipe}
+   * @param <PB>                  the type of {@code ProblemBuilder} used in the {@code Recipe}
+   * @param <R>                   the type of {@code Representation} used in the {@code Recipe}
+   * @param <O>                   the type of {@code Operator} used in the {@code Recipe}
+   * @param <M>                   the type of {@code Method} used in the {@code Recipe}
+   * @param <E>                   the type of {@code Executor} used in the {@code Recipe}
+   * @param <P>                   the type of {@code Problem} used in the {@code Recipe}
    * @param representationBuilder the {@code RepresentationBuilder} to use
    * @param operatorBuilder       the {@code OperatorBuilder} to use
    * @param methodBuilder         the {@code MethodBuilder} to use
@@ -110,10 +108,7 @@ public class Recipe<RB extends RepresentationBuilder<R>, OB extends OperatorBuil
    * @param evaluationSeed        the seed use during evaluation
    * @return the newly constructed {@code Recipe}
    */
-  public static <RB extends RepresentationBuilder<R>, OB extends OperatorBuilder<O, R>,
-      MB extends MethodBuilder<M>, EB extends ExecutorBuilder<E>, PB extends ProblemBuilder<P>,
-      R extends Representation, O extends Operator<R>, M extends Method<? extends Representation>,
-      E extends Executor, P extends Problem> Recipe<RB, OB, MB, EB, PB, R, O, M, E, P> forceConstruction(
+  public static <RB extends RepresentationBuilder<R>, OB extends OperatorBuilder<O, R>, MB extends MethodBuilder<M>, EB extends ExecutorBuilder<E>, PB extends ProblemBuilder<P>, R extends Representation, O extends Operator<R>, M extends Method<? extends Representation>, E extends Executor, P extends Problem> Recipe<RB, OB, MB, EB, PB, R, O, M, E, P> forceConstruction(
       RB representationBuilder,
       OperatorBuilder<? extends Operator<? extends Representation>, ? extends Representation> operatorBuilder,
       MB methodBuilder, EB executorBuilder, PB problemBuilder, long evolutionSeed,
@@ -218,7 +213,7 @@ public class Recipe<RB extends RepresentationBuilder<R>, OB extends OperatorBuil
    * 
    * @return the evolution seed
    */
-  public long getRecipeRandom() {
+  public long getEvolutionSeed() {
     return evolutionSeed;
   }
 

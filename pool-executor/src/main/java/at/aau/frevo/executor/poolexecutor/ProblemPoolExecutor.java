@@ -44,7 +44,8 @@ public class ProblemPoolExecutor extends PoolExecutor {
    * 
    * @param builder        the {@code PoolExecutorBuilder} used for configuration
    * @param problemBuilder the {@code ProblemBuilder} used to create {@code Problem} instances
-   * @param random         the random number generator used to create {@code Problem} instances
+   * @param random         the random number generator used to create seeds for {@code Problem}
+   *                       instances
    */
   public ProblemPoolExecutor(PoolExecutorBuilder builder,
       ProblemBuilder<? extends Problem> problemBuilder, SplittableRandom random) {
@@ -53,7 +54,7 @@ public class ProblemPoolExecutor extends PoolExecutor {
     // create Problem pool for evaluation
     var problemRadom = new SplittableRandom(random.nextLong());
     for (var i = 0; i < problemVariantCount; i++) {
-      problems.add(problemBuilder.create(problemRadom.split()));
+      problems.add(problemBuilder.create(problemRadom.nextLong()));
     }
   }
 

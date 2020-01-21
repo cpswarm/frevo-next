@@ -44,7 +44,8 @@ public class CandidatePoolExecutor extends PoolExecutor {
    * 
    * @param builder        the {@code PoolExecutorBuilder} used for configuration
    * @param problemBuilder the {@code ProblemBuilder} used to create {@code Problem} instances
-   * @param random         the random number generator used to create {@code Problem} instances
+   * @param random         the random number generator used to create seeds for {@code Problem}
+   *                       instances
    */
   public CandidatePoolExecutor(PoolExecutorBuilder builder,
       ProblemBuilder<? extends Problem> problemBuilder, SplittableRandom random) {
@@ -63,7 +64,7 @@ public class CandidatePoolExecutor extends PoolExecutor {
         var problemRandom = new SplittableRandom(problemRandomSeed);
 
         for (var i = 0; i < problemVariantCount; i++) {
-          var problem = problemBuilder.create(problemRandom.split());
+          var problem = problemBuilder.create(problemRandom.nextLong());
           var fitness = problem.evaluateRepresentation(candidate);
           fitnessSum += fitness;
         }

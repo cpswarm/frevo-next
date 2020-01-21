@@ -32,7 +32,6 @@ public class XorProblem extends Problem {
   protected float tolerance;
   protected int operationCount;
 
-  protected long evaluationSeed;
 
   protected float[] inputs = new float[2];
   protected float[] output = new float[1];
@@ -41,12 +40,10 @@ public class XorProblem extends Problem {
    * Creates a new {@code XorProblem} instance with the specified configuration.
    * 
    * @param builder the {@code XorProblemBuilder} used for configuration
-   * @param random  the random number generator to use
+   * @param seed    the seed to use
    */
-  public XorProblem(XorProblemBuilder builder, SplittableRandom random) {
-    super(random);
-
-    evaluationSeed = random.nextLong();
+  public XorProblem(XorProblemBuilder builder, long seed) {
+    super(seed);
 
     trueValue = builder.getTrueValue();
     falseValue = builder.getFalseValue();
@@ -56,7 +53,7 @@ public class XorProblem extends Problem {
 
   @Override
   public double evaluateRepresentation(Representation representation) {
-    var evaluationRandom = new SplittableRandom(evaluationSeed);
+    var evaluationRandom = new SplittableRandom(seed);
     var representationContext = representation.createContext(evaluationRandom.split());
     double errorSum = 0;
     for (int i = 0; i < operationCount; i++) {

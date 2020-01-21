@@ -17,8 +17,6 @@
 
 package at.aau.frevo;
 
-import java.util.SplittableRandom;
-
 /**
  * Abstract base class for all problems.
  * <p>
@@ -26,15 +24,15 @@ import java.util.SplittableRandom;
  */
 public abstract class Problem extends Component {
 
-  protected SplittableRandom random;
+  protected long seed;
 
   /**
-   * Creates a new {@code Problem} instance with the specified random number generator.
+   * Creates a new {@code Problem} instance with the specified seed.
    * 
-   * @param random the random number generator to use
+   * @param seed the seed to use
    */
-  public Problem(SplittableRandom random) {
-    this.random = random;
+  public Problem(long seed) {
+    this.seed = seed;
   }
 
   @Override
@@ -43,9 +41,9 @@ public abstract class Problem extends Component {
   }
 
   /**
-   * Evaluates a {@code Representation} and computes a fitness value. This method may be
-   * called multiple times and should always return the same result for identical
-   * {@code Representation} instances.
+   * Evaluates a {@code Representation} and computes a fitness value. This method may be called
+   * multiple times and should always return the same result for identical {@code Representation}
+   * instances.
    * 
    * @param representation the {@code Representation} to evaluate
    * @return the fitness value. Higher is better.

@@ -29,10 +29,10 @@ public abstract class ProblemBuilder<T extends Problem> extends Builder<T> {
   /**
    * Creates a new {@code Problem} instance based on the current configuration.
    * 
-   * @param random the random number generator used by the {@code Problem}
+   * @param seed the seed used by the {@code Problem}
    * @return a new {@code Problem} instance
    */
-  public abstract Problem create(SplittableRandom random);
+  public abstract Problem create(long seed);
 
   @Override
   public ComponentType getType() {

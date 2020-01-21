@@ -17,7 +17,6 @@
 
 package at.aau.frevo.problem.xor;
 
-import java.util.SplittableRandom;
 import at.aau.frevo.ProblemBuilder;
 
 /**
@@ -54,8 +53,8 @@ public class XorProblemBuilder extends ProblemBuilder<XorProblem> {
   }
 
   @Override
-  public XorProblem create(SplittableRandom random) {
-    return new XorProblem(this, random);
+  public XorProblem create(long seed) {
+    return new XorProblem(this, seed);
   }
 
   @Override
