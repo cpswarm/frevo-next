@@ -18,8 +18,7 @@
 package at.aau.frevo.example.xor;
 
 import at.aau.frevo.Recipe;
-import at.aau.frevo.executor.poolexecutor.PoolExecutorBuilder;
-import at.aau.frevo.executor.poolexecutor.PoolType;
+import at.aau.frevo.executor.simpleexecutor.SimpleExecutorBuilder;
 import at.aau.frevo.method.nnga.NngaMethodBuilder;
 import at.aau.frevo.problem.xor.XorProblemBuilder;
 import at.aau.frevo.representation.fullymeshednet.ActivationFunction;
@@ -50,14 +49,18 @@ public class XorRecipeExample {
             .setHiddenNodeCount(1).setIterationCount(2),
         new FullyMeshedNetOpBuilder().setWeightRange(6).setBiasRange(6).setInitialBiasRange(6)
             .setInitialWeightRange(6),
-        new NngaMethodBuilder(), new PoolExecutorBuilder().setPoolType(PoolType.CandidatePool),
-        new XorProblemBuilder(), EVOLUTION_SEED, EVALUATION_SEED);
+        new NngaMethodBuilder(), new SimpleExecutorBuilder(), new XorProblemBuilder(),
+        EVOLUTION_SEED, EVALUATION_SEED);
     try {
+      var startNanoTime = System.nanoTime();
       recipe.prepare(CANDIDATE_COUNT);
       var results = recipe.run(GENERATION_COUNT);
+      var stopNanoTime = System.nanoTime();
       var bestResult = results.get(0);
       System.out.println("Best fitness: " + bestResult.getFitness());
       System.out.println("Total generations: " + recipe.getMethod().getTotalGenerationCount());
+      System.out
+          .println("Total time: " + (double) (stopNanoTime - startNanoTime) / 1000000 + "ms");
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

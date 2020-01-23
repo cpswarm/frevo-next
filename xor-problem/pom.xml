@@ -38,6 +38,13 @@
 
 		<dependency>
 			<groupId>at.aau.frevo</groupId>
+			<artifactId>frevo-simple-executor</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>at.aau.frevo</groupId>
 			<artifactId>frevo-pool-executor</artifactId>
 			<version>${revision}</version>
 			<scope>compile</scope>
