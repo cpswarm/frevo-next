@@ -88,15 +88,18 @@ public class FullyMeshedNet extends Representation {
   @Override
   public String getHash() {
     double sum = 0;
-    for (float bias : biases) {
-      sum += bias;
-    }
     for (var weightRow : weights) {
       for (float weight : weightRow) {
         sum += weight;
       }
     }
-    return Integer.toHexString(Double.toString(sum).hashCode() & 0xFFFFF);
+    for (float bias : biases) {
+      sum += bias;
+    }
+    for (float randomBias : randomBiases) {
+      sum += randomBias;
+    }
+    return Integer.toHexString(Double.toString(sum).hashCode());
   }
 
   @Override
@@ -165,5 +168,52 @@ public class FullyMeshedNet extends Representation {
    */
   public float[] getRandomBiases() {
     return randomBiases;
+  }
+
+  @Override
+  public int compareTo(Representation other) {
+    // carry out initial comparison
+    var result = super.compareTo(other);
+    if (result != 0) {
+      return result;
+    }
+
+    var otherNet = (FullyMeshedNet) other;
+
+    // first compare basic properties
+    if (activationFunction.ordinal() != otherNet.activationFunction.ordinal()) {
+      return activationFunction.ordinal() - otherNet.activationFunction.ordinal();
+    }
+    if (hiddenNodeCount != otherNet.hiddenNodeCount) {
+      return hiddenNodeCount - otherNet.hiddenNodeCount;
+    }
+    if (iterationCount != otherNet.iterationCount) {
+      return iterationCount - otherNet.iterationCount;
+    }
+
+    // compare weights
+    for (int i = 0; i < nodeCount; i++) {
+      for (int j = 0; j < nodeCount; j++) {
+        if (weights[i][j] != otherNet.weights[i][j]) {
+          return (weights[i][j] < otherNet.weights[i][j]) ? -1 : 1;
+        }
+      }
+    }
+
+    // compare biases
+    for (int i = 0; i < nodeCount; i++) {
+      if (biases[i] != otherNet.biases[i]) {
+        return (biases[i] < otherNet.biases[i]) ? -1 : 1;
+      }
+    }
+
+    // compare random biases
+    for (int i = 0; i < nodeCount; i++) {
+      if (randomBiases[i] != otherNet.randomBiases[i]) {
+        return (randomBiases[i] < otherNet.randomBiases[i]) ? -1 : 1;
+      }
+    }
+
+    return 0;
   }
 }

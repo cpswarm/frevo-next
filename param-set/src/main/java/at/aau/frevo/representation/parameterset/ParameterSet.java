@@ -89,4 +89,29 @@ public class ParameterSet extends Representation {
   public int[] getValues() {
     return values;
   }
+
+  @Override
+  public int compareTo(Representation other) {
+    // carry out initial comparison
+    var result = super.compareTo(other);
+    if (result != 0) {
+      return result;
+    }
+
+    var otherSet = (ParameterSet) other;
+
+    // compare length of values
+    if (values.length != otherSet.values.length) {
+      return values.length - otherSet.values.length;
+    }
+
+    // compare values
+    for (int i = 0; i < values.length; i++) {
+      if (values[i] != otherSet.values[i]) {
+        return values[i] - otherSet.values[i];
+      }
+    }
+
+    return 0;
+  }
 }

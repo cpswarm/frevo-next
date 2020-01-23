@@ -22,7 +22,7 @@ import java.util.SplittableRandom;
 /**
  * Abstract base class for all representations.
  */
-public abstract class Representation extends Component {
+public abstract class Representation extends Component implements Comparable<Representation> {
 
   protected int inputCount;
   protected int outputCount;
@@ -88,6 +88,15 @@ public abstract class Representation extends Component {
   public abstract Representation cloneRepresentation();
 
   /**
+   * Gets a name for the {@code Representation}.
+   * 
+   * @return a name {@code String}
+   */
+  public String getName() {
+    return getClass().getName();
+  }
+
+  /**
    * Gets a {@code String} hash for the {@code Representation}.
    * 
    * @return a {@code String} hash of the {@code Representation}
@@ -96,6 +105,25 @@ public abstract class Representation extends Component {
 
   @Override
   final public String toString() {
-    return getClass().getName() + "(" + this.getHash() + ")";
+    return getName() + "(" + this.getHash() + ")";
+  }
+
+  /**
+   * Compares this {@code Representation} instance with another instance.
+   * <p>
+   * Sub classes should first call this method and carry out further comparisons if the result is
+   * zero.
+   * 
+   * @param other the second {@code Representation} instance
+   * @return a negative integer if this {@code Representation} is less than the other
+   *         {@code Representation}, positive if greater or zero if the same
+   */
+  public int compareTo(Representation other) {
+    // only functionally equivalent Representation instances can be compared
+    if ((getInputCount() != other.getInputCount())
+        || (getOutputCount() != other.getOutputCount())) {
+      throw new IllegalArgumentException();
+    }
+    return getName().compareTo(other.getName());
   }
 }

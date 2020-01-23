@@ -59,19 +59,23 @@ public class Result<R extends Representation> implements Comparable<Result<R>> {
 
   /**
    * Compares this object with another {@code Result} instance.
+   * <p>
+   * First compare by fitness, then if they are same, the {@code Representation} instances.
    * 
    * @param other the other {@code Result}
-   * @return {@code -1} if this object's fitness is higher, {@code 1} if the other fitness value is higer, {@code 0} if they
-   *         are the same.
+   * @return {@code -1} if this {@code Result} instance should be ranked higher, {@code 1} if the
+   *         other {@code Result} should be ranked higher, 0 if the same.
    */
   @Override
   public int compareTo(Result<R> other) {
+    // primary sort: fitness
     if (fitness > other.fitness) {
       return -1;
     } else if (fitness < other.fitness) {
       return 1;
     } else {
-      return 0;
+      // secondary sort: representation
+      return getRepresentation().compareTo(other.getRepresentation());
     }
   }
 }
