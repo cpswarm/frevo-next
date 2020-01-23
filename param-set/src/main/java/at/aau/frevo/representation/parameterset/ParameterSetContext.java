@@ -36,8 +36,8 @@ public class ParameterSetContext extends RepresentationContext<ParameterSet> {
 
   @Override
   public void calculate(float[] input, float[] output) {
-    var outputSize = representation.getOutputCount();
-    for (int i = 0; i < outputSize; i++) {
+    var length = Math.min(representation.values.length, representation.getOutputCount());
+    for (int i = 0; i < length; i++) {
       output[i] = representation.values[i] * representation.parameters[i].scale;
     }
   }
