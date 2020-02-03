@@ -102,7 +102,8 @@ public class LocalExecutor extends Executor {
       evaluationCountDownLatch.await();
     } else {
       if (!evaluationCountDownLatch.await(timeoutMilliSeconds, TimeUnit.MILLISECONDS)) {
-        // if the time out occured, try to terminate workers
+        // if the timeout occured, clear queue and try to terminate workers
+        evaluationQueue.clear();
         while (evaluationCountDownLatch.getCount() > 0) {
           evaluationCountDownLatch.countDown();
         }
