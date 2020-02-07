@@ -18,28 +18,23 @@
 package at.aau.frevo.executor.localexecutor;
 
 import java.util.SplittableRandom;
-import at.aau.frevo.ComponentType;
-import at.aau.frevo.ExecutorBuilder;
 import at.aau.frevo.Problem;
 import at.aau.frevo.ProblemBuilder;
 import at.aau.frevo.Representation;
+import at.aau.frevo.executor.baseexecutor.BaseExecutorBuilder;
 
 /**
  * Builder for {@link LocalExecutor} instances.
  */
-public class LocalExecutorBuilder extends ExecutorBuilder<LocalExecutor> {
+public class LocalExecutorBuilder extends BaseExecutorBuilder<LocalExecutor> {
 
   protected int workerCount;
-  protected int problemVariantCount;
-  protected long timeoutMilliSeconds;
 
   /**
    * Constructs a new {@code LocalExecutorBuilder} instance.
    */
   public LocalExecutorBuilder() {
     workerCount = 0;
-    problemVariantCount = 1;
-    timeoutMilliSeconds = 0;
   }
 
   /**
@@ -49,19 +44,13 @@ public class LocalExecutorBuilder extends ExecutorBuilder<LocalExecutor> {
    * @param source the source {@code LocalExecutorBuilder} instance
    */
   public LocalExecutorBuilder(LocalExecutorBuilder source) {
+    super(source);
     workerCount = source.workerCount;
-    problemVariantCount = source.problemVariantCount;
-    timeoutMilliSeconds = source.timeoutMilliSeconds;
   }
 
   @Override
   public String getName() {
     return LocalExecutor.class.getName();
-  }
-
-  @Override
-  public ComponentType getType() {
-    return ComponentType.EXECUTOR;
   }
 
   @Override
@@ -95,45 +84,13 @@ public class LocalExecutorBuilder extends ExecutorBuilder<LocalExecutor> {
     return this;
   }
 
-  /**
-   * Gets the number of different problem variants used to evaluate a candidate
-   * {@link Representation}.
-   * 
-   * @return the problem variant count
-   */
-  public int getProblemVariantCount() {
-    return problemVariantCount;
-  }
-
-  /**
-   * Sets the number of different problem variants used to evaluate a candidate
-   * {@link Representation}.
-   * 
-   * @param problemVariantCount the problem variant count
-   * @return this {@code LocalExecutorBuilder} instance
-   */
+  @Override
   public LocalExecutorBuilder setProblemVariantCount(int problemVariantCount) {
-    this.problemVariantCount = problemVariantCount;
-    return this;
+    return (LocalExecutorBuilder) super.setProblemVariantCount(problemVariantCount);
   }
 
-  /**
-   * Gets the timeout milliseconds for the evaluation of {@link Representation} instances.
-   * 
-   * @return the timeout
-   */
-  public long getTimeoutMilliSeconds() {
-    return timeoutMilliSeconds;
-  }
-
-  /**
-   * Sets the timeout milliseconds for the evaluation of {@link Representation} instances.
-   * 
-   * @param timeoutMilliSeconds the timeout in milliseconds
-   * @return this {@code LocalExecutorBuilder} instance
-   */
-  public LocalExecutorBuilder setTimeoutMilliSeconds(long timeoutMilliSeconds) {
-    this.timeoutMilliSeconds = timeoutMilliSeconds;
-    return this;
+  @Override
+  public BaseExecutorBuilder<LocalExecutor> setTimeoutMilliSeconds(long timeoutMilliSeconds) {
+    return super.setTimeoutMilliSeconds(timeoutMilliSeconds);
   }
 }

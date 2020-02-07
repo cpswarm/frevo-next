@@ -17,22 +17,16 @@
 
 package at.aau.frevo.executor.localexecutor;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.SplittableRandom;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import at.aau.frevo.Evaluation;
-import at.aau.frevo.Executor;
 import at.aau.frevo.Problem;
 import at.aau.frevo.ProblemBuilder;
 import at.aau.frevo.Representation;
-import at.aau.frevo.Result;
+import at.aau.frevo.executor.baseexecutor.BaseExecutor;
 
 /**
  * Uses a work-stealing pool to run evaluations on a number of workers.
@@ -40,14 +34,10 @@ import at.aau.frevo.Result;
  * Out of the box, {@link LocalWorker} is provided to do the work, however subclasses could provide
  * different functionality.
  */
-public class LocalExecutor extends Executor {
+public class LocalExecutor extends BaseExecutor {
 
   protected ExecutorService executorService = null;
-
   protected int workerCount;
-  protected int problemVariantCount;
-  protected long problemRandomSeed;
-  protected long timeoutMilliSeconds;
 
   /**
    * Creates a new {@code LocalExecutor} instance with the specified configuration.
@@ -59,97 +49,18 @@ public class LocalExecutor extends Executor {
    */
   public LocalExecutor(LocalExecutorBuilder builder,
       ProblemBuilder<? extends Problem> problemBuilder, SplittableRandom random) {
-    super(problemBuilder);
-    problemVariantCount = builder.getProblemVariantCount();
-    workerCount = builder.getWorkerCount();
+    super(builder, problemBuilder, random);
 
     // use available processors if worker count is zero
+    workerCount = builder.getWorkerCount();
     if (workerCount == 0) {
       workerCount = Runtime.getRuntime().availableProcessors();
     }
-    timeoutMilliSeconds = builder.getTimeoutMilliSeconds();
-    problemRandomSeed = random.nextLong();
     executorService = Executors.newWorkStealingPool();
   }
 
   @Override
-  public <R extends Representation> List<Result<R>> evaluateRepresentations(List<R> representations)
-      throws InterruptedException {
-
-    var evaluationCount = representations.size() * problemVariantCount;
-    var evaluations = new ArrayList<Evaluation<R>>(evaluationCount);
-    var evaluationQueue = new ArrayBlockingQueue<Evaluation<R>>(evaluationCount);
-    var problemRandom = new SplittableRandom(problemRandomSeed);
-    var evalutionSeeds = new ArrayList<Long>(representations.size());
-
-    // create evaluations
-    for (var i = 0; i < problemVariantCount; i++) {
-      var evaluationSeed = problemRandom.nextLong();
-      evalutionSeeds.add(evaluationSeed);
-      for (var representation : representations) {
-        var evaluation = new Evaluation<R>(representation, evaluationSeed);
-        evaluations.add(evaluation);
-        evaluationQueue.add(evaluation);
-      }
-    }
-
-    final var evaluationCountDownLatch = new CountDownLatch(evaluationCount);
-
-    startWorkers(evaluationQueue, evaluationCountDownLatch);
-
-    // wait for workers to complete
-    if (timeoutMilliSeconds == 0) {
-      evaluationCountDownLatch.await();
-    } else {
-      if (!evaluationCountDownLatch.await(timeoutMilliSeconds, TimeUnit.MILLISECONDS)) {
-        // if the timeout occured, clear queue and try to terminate workers
-        evaluationQueue.clear();
-        while (evaluationCountDownLatch.getCount() > 0) {
-          evaluationCountDownLatch.countDown();
-        }
-      }
-    }
-
-    // create results
-    // start by collating results by representation
-    var resultHashtable = new HashMap<R, ArrayList<Evaluation<R>>>();
-    for (var evaluation : evaluations) {
-      // only consider evaluations where a fitness was set
-      if (evaluation.getFitness() >= 0) {
-        var resultSet = resultHashtable.get(evaluation.getRepresentation());
-        if (resultSet == null) {
-          resultSet = new ArrayList<>();
-          resultHashtable.put(evaluation.getRepresentation(), resultSet);
-        }
-        resultSet.add(evaluation);
-      }
-    }
-
-    // average fitness
-    var results = new ArrayList<Result<R>>();
-    resultHashtable.forEach((k, v) -> {
-      double fitnessSum = 0;
-      for (var evaluation : v) {
-        fitnessSum += evaluation.getFitness();
-      }
-      results.add(new Result<R>(k, fitnessSum / v.size()));
-    });
-
-    Collections.sort(results);
-    return results;
-  }
-
-  /**
-   * Starts workers to actually carry out the evaluation of {@code Representation} instances.
-   * <p>
-   * This is provided as a separate method to allow subclasse to easily start other sorts of
-   * workers.
-   * 
-   * @param <R>                      the type of {@code Representation} to evaluate
-   * @param evaluationQueue          the queue of {@code Evaluation} instances
-   * @param evaluationCountDownLatch the count down latch used for signalling the completion of work
-   */
-  protected <R extends Representation> void startWorkers(
+  protected <R extends Representation> void dispatchEvaluation(
       ArrayBlockingQueue<Evaluation<R>> evaluationQueue, CountDownLatch evaluationCountDownLatch) {
     for (int i = 0; i < workerCount; ++i) {
       executorService
