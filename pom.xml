@@ -109,7 +109,6 @@
 		<module>simple-executor</module>
 		<module>base-executor</module>
 		<module>local-executor</module>
-		<module>pool-executor</module>
 		<module>xor-problem</module>
     </modules>
 

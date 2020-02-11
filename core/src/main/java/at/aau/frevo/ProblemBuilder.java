@@ -17,8 +17,6 @@
 
 package at.aau.frevo;
 
-import java.util.SplittableRandom;
-
 /**
  * Abstract base class for all problem builders.
  * 

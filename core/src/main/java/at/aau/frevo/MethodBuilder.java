@@ -30,7 +30,7 @@ public abstract class MethodBuilder<T extends Method<? extends Representation>> 
   /**
    * Creates a new {@code Method} instance based on the current configuration.
    * 
-   * @param                  <R> the type of {@code Representation} to use
+   * @param <R>              the type of {@code Representation} to use
    * @param rankedCandidates the initial {@code Representation} instances to use
    * @param operator         the {@code Operator} to use
    * @param executor         the {@code Executor} to use

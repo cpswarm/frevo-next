@@ -51,8 +51,8 @@ public class SimpleExecutor extends Executor {
   }
 
   @Override
-  public <R extends Representation> List<Result<R>> evaluateRepresentations(List<R> representations)
-      throws InterruptedException {
+  public <R extends Representation> List<Result<R>> evaluateRepresentations(
+      List<R> representations) {
     var results = new ArrayList<Result<R>>(representations.size() * problemVariantCount);
 
     // evaluate the representations sequentially on this thread

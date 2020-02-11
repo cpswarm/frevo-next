@@ -58,8 +58,8 @@ public abstract class BaseExecutor extends Executor {
   }
 
   @Override
-  public <R extends Representation> List<Result<R>> evaluateRepresentations(List<R> representations)
-      throws InterruptedException {
+  public <R extends Representation> List<Result<R>> evaluateRepresentations(
+      List<R> representations) {
 
     var evaluationCount = representations.size() * problemVariantCount;
     var evaluations = new ArrayList<Evaluation<R>>(evaluationCount);
@@ -83,16 +83,19 @@ public abstract class BaseExecutor extends Executor {
     dispatchEvaluation(evaluationQueue, evaluationCountDownLatch);
 
     // wait for evaluation to complete
-    if (timeoutMilliSeconds == 0) {
-      evaluationCountDownLatch.await();
-    } else {
-      if (!evaluationCountDownLatch.await(timeoutMilliSeconds, TimeUnit.MILLISECONDS)) {
-        // if the timeout occured, clear queue and cancel
-        evaluationQueue.clear();
-        while (evaluationCountDownLatch.getCount() > 0) {
-          evaluationCountDownLatch.countDown();
-        }
+    try {
+      if (timeoutMilliSeconds == 0) {
+        evaluationCountDownLatch.await();
+      } else {
+        evaluationCountDownLatch.await(timeoutMilliSeconds, TimeUnit.MILLISECONDS);
       }
+    } catch (InterruptedException e) {
+    }
+
+    // clear any remaining work
+    evaluationQueue.clear();
+    while (evaluationCountDownLatch.getCount() > 0) {
+      evaluationCountDownLatch.countDown();
     }
 
     // create results

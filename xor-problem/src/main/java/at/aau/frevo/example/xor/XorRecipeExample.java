@@ -59,8 +59,7 @@ public class XorRecipeExample {
       var bestResult = results.get(0);
       System.out.println("Best fitness: " + bestResult.getFitness());
       System.out.println("Total generations: " + recipe.getMethod().getTotalGenerationCount());
-      System.out
-          .println("Total time: " + (double) (stopNanoTime - startNanoTime) / 1000000 + "ms");
+      System.out.println("Total time: " + (double) (stopNanoTime - startNanoTime) / 1000000 + "ms");
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

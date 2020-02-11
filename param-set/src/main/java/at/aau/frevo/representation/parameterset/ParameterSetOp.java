@@ -68,7 +68,7 @@ public class ParameterSetOp extends Operator<ParameterSet> {
       var param = mutantSet.parameters[i];
 
       if (random.nextDouble() < directMutationProbability) {
-        var range = Math.max((int) (directMutationSeverity * (param.maximum - param.minimum)), 0);        
+        var range = Math.max((int) (directMutationSeverity * (param.maximum - param.minimum)), 0);
         mutantSet.values[i] += random.nextInt(-range, range + 1);
       }
 

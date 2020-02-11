@@ -21,7 +21,8 @@ package at.aau.frevo;
  * The abstract base class for all builders.
  * 
  * @param <T> the type of component associated with the {@code Builder}. This type parameter allows
- *        the compiler to reason about the type of objects produced by {@code Builder} instances.
+ *            the compiler to reason about the type of objects produced by {@code Builder}
+ *            instances.
  */
 public abstract class Builder<T extends Component> {
 

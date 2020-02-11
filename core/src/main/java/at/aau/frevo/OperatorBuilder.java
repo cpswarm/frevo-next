@@ -42,7 +42,7 @@ public abstract class OperatorBuilder<T extends Operator<R>, R extends Represent
   public ComponentType getType() {
     return ComponentType.OPERATOR;
   }
-  
+
   @Override
   public abstract OperatorBuilder<T, R> cloneBuilder();
 }

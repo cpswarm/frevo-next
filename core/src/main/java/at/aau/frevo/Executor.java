@@ -46,13 +46,12 @@ public abstract class Executor extends Component {
   /**
    * Evaluates a list of {@code Representation} instances.
    * 
-   * @param                 <R> the type of {@code Representation} to evaluate
+   * @param <R>             the type of {@code Representation} to evaluate
    * @param representations the {@code Representation} instances to evaluate
    * @return a list of {@code Result} instances, sorted by decreasing fitness value
-   * @throws InterruptedException if the current thread was interrupted
    */
   public abstract <R extends Representation> List<Result<R>> evaluateRepresentations(
-      List<R> representations) throws InterruptedException;
+      List<R> representations);
 
   /**
    * Gets the {@code ProblemBuilder}
