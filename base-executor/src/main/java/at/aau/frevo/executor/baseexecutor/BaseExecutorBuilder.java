@@ -27,6 +27,7 @@ import at.aau.frevo.Representation;
 public abstract class BaseExecutorBuilder<E extends BaseExecutor> extends ExecutorBuilder<E> {
 
   protected int problemVariantCount;
+  protected boolean strict;
   protected long timeoutMilliSeconds;
 
   /**
@@ -34,6 +35,7 @@ public abstract class BaseExecutorBuilder<E extends BaseExecutor> extends Execut
    */
   public BaseExecutorBuilder() {
     problemVariantCount = 1;
+    strict = true;
     timeoutMilliSeconds = 0;
   }
 
@@ -45,6 +47,7 @@ public abstract class BaseExecutorBuilder<E extends BaseExecutor> extends Execut
    */
   public BaseExecutorBuilder(BaseExecutorBuilder<E> source) {
     problemVariantCount = source.problemVariantCount;
+    strict = source.strict;
     timeoutMilliSeconds = source.timeoutMilliSeconds;
   }
 
@@ -72,6 +75,28 @@ public abstract class BaseExecutorBuilder<E extends BaseExecutor> extends Execut
    */
   public BaseExecutorBuilder<E> setProblemVariantCount(int problemVariantCount) {
     this.problemVariantCount = problemVariantCount;
+    return this;
+  }
+
+  /**
+   * Gets the flag indicating that the {@code BaseExecutor} is strict, that is, requires all problem
+   * variants to be executed.
+   * 
+   * @return {@code true} if the {@code BaseExecutor} is strict
+   */
+  public boolean isStrict() {
+    return strict;
+  }
+
+  /**
+   * Sets the flag indicating that the {@code BaseExecutor} is strict, that is, requires all problem
+   * variants to be executed.
+   * 
+   * @param strict the strict flag
+   * @return this {@code BaseExecutorBuilder} instance
+   */
+  public BaseExecutorBuilder<E> setStrict(boolean strict) {
+    this.strict = strict;
     return this;
   }
 

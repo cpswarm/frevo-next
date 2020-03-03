@@ -67,4 +67,13 @@ public class LocalExecutor extends BaseExecutor {
           .submit(new LocalWorker<R>(i, evaluationQueue, evaluationCountDownLatch, problemBuilder));
     }
   }
+
+  /**
+   * Gets the number of workers created to evaluate candidate {@link Representation} instances.
+   * 
+   * @return the worker count
+   */
+  public int getWorkerCount() {
+    return workerCount;
+  }
 }

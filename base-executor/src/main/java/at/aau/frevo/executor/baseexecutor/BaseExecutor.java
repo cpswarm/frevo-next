@@ -38,6 +38,7 @@ import at.aau.frevo.Result;
 public abstract class BaseExecutor extends Executor {
 
   protected int problemVariantCount;
+  protected boolean strict;
   protected long problemRandomSeed;
   protected long timeoutMilliSeconds;
 
@@ -53,6 +54,7 @@ public abstract class BaseExecutor extends Executor {
       ProblemBuilder<? extends Problem> problemBuilder, SplittableRandom random) {
     super(problemBuilder);
     problemVariantCount = builder.getProblemVariantCount();
+    strict = builder.isStrict();
     timeoutMilliSeconds = builder.getTimeoutMilliSeconds();
     problemRandomSeed = random.nextLong();
   }
@@ -65,12 +67,10 @@ public abstract class BaseExecutor extends Executor {
     var evaluations = new ArrayList<Evaluation<R>>(evaluationCount);
     var evaluationQueue = new ArrayBlockingQueue<Evaluation<R>>(evaluationCount);
     var problemRandom = new SplittableRandom(problemRandomSeed);
-    var evalutionSeeds = new ArrayList<Long>(representations.size());
 
     // create evaluations
     for (var i = 0; i < problemVariantCount; i++) {
       var evaluationSeed = problemRandom.nextLong();
-      evalutionSeeds.add(evaluationSeed);
       for (var representation : representations) {
         var evaluation = new Evaluation<R>(representation, evaluationSeed);
         evaluations.add(evaluation);
@@ -116,11 +116,13 @@ public abstract class BaseExecutor extends Executor {
     // average fitness
     var results = new ArrayList<Result<R>>();
     resultHashtable.forEach((k, v) -> {
-      double fitnessSum = 0;
-      for (var evaluation : v) {
-        fitnessSum += evaluation.getFitness();
+      if ((v.size() == problemVariantCount) || !strict) {
+        double fitnessSum = 0;
+        for (var evaluation : v) {
+          fitnessSum += evaluation.getFitness();
+        }
+        results.add(new Result<R>(k, fitnessSum / v.size()));
       }
-      results.add(new Result<R>(k, fitnessSum / v.size()));
     });
 
     Collections.sort(results);
@@ -128,7 +130,7 @@ public abstract class BaseExecutor extends Executor {
   }
 
   /**
-   * Starts the actual evalation
+   * Starts the actual evalation.
    * 
    * @param <R>                      the type of {@code Representation} to evaluate
    * @param evaluationQueue          the queue of {@code Evaluation} instances
@@ -136,4 +138,42 @@ public abstract class BaseExecutor extends Executor {
    */
   protected abstract <R extends Representation> void dispatchEvaluation(
       ArrayBlockingQueue<Evaluation<R>> evaluationQueue, CountDownLatch evaluationCountDownLatch);
+
+  /**
+   * Gets the number of different problem variants used to evaluate a candidate
+   * {@link Representation}.
+   * 
+   * @return the problem variant count
+   */
+  public int getProblemVariantCount() {
+    return problemVariantCount;
+  }
+
+  /**
+   * Gets the flag indicating that the {@code BaseExecutor} is strict, that is, requires all problem
+   * variants to be executed.
+   * 
+   * @return {@code true} if the {@code BaseExecutor} is strict
+   */
+  public boolean isStrict() {
+    return strict;
+  }
+
+  /**
+   * Gets the random seed used for creating problem variants.
+   * 
+   * @return the seed
+   */
+  public long getProblemRandomSeed() {
+    return problemRandomSeed;
+  }
+
+  /**
+   * Gets the timeout milliseconds for the evaluation of {@link Representation} instances.
+   * 
+   * @return the timeout
+   */
+  public long getTimeoutMilliSeconds() {
+    return timeoutMilliSeconds;
+  }
 }

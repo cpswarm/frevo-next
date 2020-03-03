@@ -90,6 +90,11 @@ public class LocalExecutorBuilder extends BaseExecutorBuilder<LocalExecutor> {
   }
 
   @Override
+  public LocalExecutorBuilder setStrict(boolean strict) {
+    return (LocalExecutorBuilder) super.setStrict(strict);
+  }
+
+  @Override
   public BaseExecutorBuilder<LocalExecutor> setTimeoutMilliSeconds(long timeoutMilliSeconds) {
     return super.setTimeoutMilliSeconds(timeoutMilliSeconds);
   }
